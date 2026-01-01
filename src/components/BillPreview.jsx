@@ -236,7 +236,7 @@ const BillPreview = ({ data, onBack, onPrint }) => {
                 ${lab.addressLine1 ? `<div class="address">${lab.addressLine1}</div>` : ''}
                 ${lab.addressLine2 ? `<div class="address">${lab.addressLine2}</div>` : ''}
                 <div class="contact-info">
-                  ${lab.contact1 || lab.contact2 ? `Contact No.: ${[lab.contact1, lab.contact2].filter(Boolean).join(', ')}` : ''}
+                  ${lab.contact1 || lab.contact2 ? `Contact No.: ${[lab.contact1, lab.contact2].filter(Boolean).map(c => String(c).startsWith('8084') ? `<b>${c}</b>` : c).join(', ')}` : ''}
                   ${lab.email ? ` | Email: ${lab.email}` : ''}
                 </div>
               </div>
@@ -399,7 +399,16 @@ const BillPreview = ({ data, onBack, onPrint }) => {
                 <div className="mt-1 text-sm text-gray-700 space-y-0.5">
                   {lab.addressLine1 ? <div>{lab.addressLine1}</div> : null}
                   {lab.addressLine2 ? <div>{lab.addressLine2}</div> : null}
-                  {(lab.contact1 || lab.contact2) ? <div className="font-semibold">Contact No.: {[lab.contact1, lab.contact2].filter(Boolean).join(', ')}</div> : null}
+                  {(lab.contact1 || lab.contact2) ? (
+                    <div>
+                      <span className="font-bold">Contact No.: </span>
+                      {[lab.contact1, lab.contact2].filter(Boolean).map((contact, idx, arr) => (
+                        <span key={idx} className={String(contact).startsWith('8084') ? 'font-bold' : ''}>
+                          {contact}{idx < arr.length - 1 ? ', ' : ''}
+                        </span>
+                      ))}
+                    </div>
+                  ) : null}
                   {lab.email ? <div>Email: {lab.email}</div> : null}
                 </div>
               </div>

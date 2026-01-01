@@ -56,8 +56,8 @@ const CreateBill = ({ onSubmit }) => {
     name: 'Radha Jyoti Diagnostics',
     addressLine1: 'Roy Complex, Infront of ML Academy School, VIP Road, Laheriasarai, Darbhanga',
     addressLine2: 'District: Darbhanga, PIN: 846001, State: Bihar',
-    contact1: '8873867062',
-    contact2: '8084930464',
+    contact1: '8084930463',
+    contact2: '8873867062',
     email: 'radhajyotidiagnostics@gmail.com',
   })
   const [discount, setDiscount] = useState('')
