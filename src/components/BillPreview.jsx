@@ -205,7 +205,7 @@ const BillPreview = ({ data, onBack, onPrint }) => {
             margin: 2px 0;
           }
           .signature { 
-            margin-top: 20px; 
+            margin-top: 5px; 
             text-align: right;
             font-size: 10px;
           }
@@ -365,14 +365,9 @@ const BillPreview = ({ data, onBack, onPrint }) => {
           <div class="footer">
             <div class="footer-note"><strong>Monday to Sunday, Time - 08 : 00 AM to 07 : 00 PM</strong></div>
             <div class="footer-note"><strong>Reports Can be taken after Full payment</strong></div>
-            <div class="footer-note"><strong>Home Collection Available</strong></div>
-            <div class="footer-note">1. Technical causes can delay analysis are require resampling for validation of report.</div>
-            <div class="footer-note">2. All the reporting date will be depending upon the turn around time of the test.</div>
-            <div class="footer-note">3. Biopsy,FNAC,Bone Marrow etc. patients may confirm the availability of report on phone.</div>
-            <div class="footer-note">4. Report value will not be Communicated ever phone by any staff member.</div>
             
             <div class="signature">
-              <div style="margin-top: 50px;">_______________________</div>
+              <div style="margin-top: 5px;">_______________________</div>
               <div>Authorised Signatory</div>
             </div>
           </div>
@@ -564,19 +559,12 @@ const BillPreview = ({ data, onBack, onPrint }) => {
               <div className="text-xs text-gray-700 space-y-1">
                 <div className="font-bold">Monday to Sunday, Time - 08 : 00 AM to 07 : 00 PM</div>
                 <div className="font-bold">Reports Can be taken after Full payment</div>
-                <div className="font-bold">Home Collection Available</div>
-                <div className="mt-2 space-y-0.5">
-                  <div>1. Technical causes can delay analysis are require resampling for validation of report.</div>
-                  <div>2. All the reporting date will be depending upon the turn around time of the test.</div>
-                  <div>3. Biopsy,FNAC,Bone Marrow etc. patients may confirm the availability of report on phone.</div>
-                  <div>4. Report value will not be Communicated ever phone by any staff member.</div>
-                </div>
               </div>
 
               {/* Signature */}
-              <div className="mt-8 text-right">
+              <div className="mt-2 text-right">
                 <div className="inline-block text-center">
-                  <div className="mt-8 text-gray-900">_______________________</div>
+                  <div className="mt-2 text-gray-900">_______________________</div>
                   <div className="text-sm font-medium text-gray-700 mt-1">Authorised Signatory</div>
                 </div>
               </div>
