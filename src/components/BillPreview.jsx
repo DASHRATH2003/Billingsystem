@@ -5,21 +5,6 @@ const formatCurrency = (value) => {
   return new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 2 }).format(value)
 }
 
-const numberToWords = (num) => {
-  if (num === 0) return 'Zero Rupees Only'
-  const a = ['','One','Two','Three','Four','Five','Six','Seven','Eight','Nine','Ten','Eleven','Twelve','Thirteen','Fourteen','Fifteen','Sixteen','Seventeen','Eighteen','Nineteen']
-  const b = ['','', 'Twenty','Thirty','Forty','Fifty','Sixty','Seventy','Eighty','Ninety']
-  const s = (n) => {
-    if (n < 20) return a[n]
-    if (n < 100) return b[Math.floor(n/10)] + (n%10 ? ' ' + a[n%10] : '')
-    if (n < 1000) return a[Math.floor(n/100)] + ' Hundred' + (n%100 ? ' ' + s(n%100) : '')
-    if (n < 100000) return s(Math.floor(n/1000)) + ' Thousand' + (n%1000 ? ' ' + s(n%1000) : '')
-    if (n < 10000000) return s(Math.floor(n/100000)) + ' Lakh' + (n%100000 ? ' ' + s(n%100000) : '')
-    return s(Math.floor(n/10000000)) + ' Crore' + (n%10000000 ? ' ' + s(n%10000000) : '')
-  }
-  return s(Math.floor(num)) + ' Rupees Only'
-}
-
 // formatRefBy removed from usage; keeping logic inline via label text
 
 const formatDT = (value) => {
@@ -60,177 +45,12 @@ const BillPreview = ({ data, onBack, onPrint }) => {
   // Function to handle print
   const handlePrint = () => {
     const printWindow = window.open('', '_blank')
-    printWindow.document.write(`
-      <!DOCTYPE html>
-      <html>
-      <head>
-        <title> </title>
-        <style>
-          @page { margin: 0; }
-          body { 
-            font-family: 'Arial', sans-serif; 
-            margin: 0; 
-            padding: 20px; 
-            background: #fff; 
-            color: #000;
-            line-height: 1.4;
-            font-size: 12px;
-          }
-          .bill-container { 
-            max-width: 800px; 
-            margin: 0 auto; 
-            border: 2px solid #000; 
-            padding: 15px;
-            position: relative;
-          }
-          .header { 
-            text-align: center; 
-            padding-bottom: 10px; 
-            margin-bottom: 10px;
-            border-bottom: 2px solid #000;
-          }
-          .lab-name { 
-            font-size: 24px; 
-            font-weight: bold; 
-            color: #000; 
-            margin-bottom: 2px;
-            text-transform: uppercase;
-          }
-          .address { 
-            font-size: 11px; 
-            color: #000; 
-            margin: 1px 0;
-          }
-          .contact-info { 
-            font-size: 10px; 
-            color: #000; 
-            margin-top: 3px;
-          }
-          .receipt-title { 
-            font-size: 18px; 
-            font-weight: bold; 
-            text-align: center; 
-            margin: 10px 0;
-            text-decoration: underline;
-            text-transform: uppercase;
-          }
-          .patient-section, .meta-section { 
-            margin-bottom: 10px;
-          }
-          .info-row-left { 
-            margin: 2px 0; 
-            padding: 0 5px;
-            display: grid;
-            grid-template-columns: 80px 9px auto;
-            align-items: center;
-          }
-          .info-label-left { 
-            font-weight: bold; 
-            white-space: nowrap;
-          }
-          .colon-left { 
-            display: inline-block; 
-            width: 10px; 
-            margin: 0;
-            text-align: center; 
-          }
-          .info-value-left { 
-            white-space: nowrap; 
-          }
-          .info-row-left span { white-space: nowrap; }
-
-          .info-row-right { 
-            margin: 2px 0; 
-            padding: 0 5px;
-            display: grid;
-            grid-template-columns: 150px 10px auto;
-            align-items: center;
-          }
-          .info-label-right { 
-            font-weight: bold; 
-            white-space: nowrap;
-          }
-          .colon-right { 
-            display: inline-block; 
-            width: 10px; 
-            margin: 0;
-            text-align: center; 
-          }
-          .info-value-right { 
-            white-space: nowrap; 
-          }
-          .info-row-right span { white-space: nowrap; }
-          table { 
-            width: 100%; 
-            border-collapse: collapse; 
-            margin: 15px 0;
-            border: 1px solid #000;
-          }
-          th { 
-            background: #f0f0f0; 
-            color: #000; 
-            padding: 6px; 
-            text-align: left;
-            border: 1px solid #000;
-            font-weight: bold;
-          }
-          td { 
-            padding: 6px; 
-            border: 1px solid #000;
-          }
-          .summary-section { 
-            margin-top: 15px; 
-          }
-          .summary-row { 
-            display: flex; 
-            justify-content: space-between; 
-            padding: 3px 0;
-          }
-          .amount-in-words { 
-            font-style: italic; 
-            margin: 10px 0; 
-            padding: 8px; 
-            background: #f8f8f8; 
-            border: 1px solid #ccc;
-            font-size: 11px;
-          }
-          .footer { 
-            margin-top: 20px; 
-            font-size: 9px; 
-            color: #000;
-            border-top: 1px solid #000;
-            padding-top: 10px;
-          }
-          .footer-note { 
-            margin: 2px 0;
-          }
-          .signature { 
-            margin-top: 5px; 
-            text-align: right;
-            font-size: 10px;
-          }
-          .watermark { 
-            position: absolute; 
-            top: 40%; 
-            left: 50%; 
-            transform: translate(-50%, -50%) rotate(-45deg); 
-            opacity: 0.05; 
-            font-size: 60px; 
-            color: #000; 
-            z-index: -1;
-          }
-          @media print {
-            body { padding: 20px; }
-            .no-print { display: none !important; }
-            .bill-container { border: 2px solid #000; padding: 15px; }
-          }
-        </style>
-      </head>
-      <body>
+    
+    const billContent = `
         <div class="bill-container">
           <div class="header">
-            <div style="position:relative; text-align:center; min-height:96px;">
-              ${logoSrc ? `<img src="${logoSrc}" alt="Logo" style="position:absolute; left:10px; top:0; width:96px; height:96px; object-fit:contain;" />` : ''}
+            <div style="position:relative; text-align:center; min-height:80px;">
+              ${logoSrc ? `<img src="${logoSrc}" alt="Logo" style="position:absolute; left:0; top:0; width:80px; height:80px; object-fit:contain;" />` : ''}
               <div>
                 <div class="lab-name">${lab.name || 'RADHA JYOTI DIAGNOSTICS'}</div>
                 ${lab.addressLine1 ? `<div class="address">${lab.addressLine1}</div>` : ''}
@@ -245,7 +65,7 @@ const BillPreview = ({ data, onBack, onPrint }) => {
           
           <div class="receipt-title">MONEY RECEIPT</div>
           
-          <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 20px; margin-bottom: 15px;">
+          <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; margin-bottom: 10px;">
             <div class="patient-section" style="flex: 1;">
               <div class="info-row-left">
                 <span class="info-label-left">AID</span>
@@ -274,7 +94,7 @@ const BillPreview = ({ data, onBack, onPrint }) => {
               </div>
             </div>
             
-            <div class="meta-section" style="flex: 1; margin-left: 20px;">
+            <div class="meta-section" style="flex: 1; margin-left: 10px;">
               <div class="info-row-right">
                 <span class="info-label-right">SI NO</span>
                 <span class="colon-right">:</span>
@@ -303,13 +123,13 @@ const BillPreview = ({ data, onBack, onPrint }) => {
             </div>
           </div>
           
-          <div style="font-weight: bold; margin: 10px 0 5px 0;">TEST NAME</div>
+          <div style="font-weight: bold; margin: 5px 0 2px 0; font-size: 11px;">TEST NAME</div>
           <table>
             <thead>
               <tr>
                 <th style="width: 30px;">#</th>
                 <th>TEST NAME</th>
-                <th style="width: 100px; text-align: right;">AMOUNT</th>
+                <th style="width: 80px; text-align: right;">AMOUNT</th>
               </tr>
             </thead>
             <tbody>
@@ -323,16 +143,10 @@ const BillPreview = ({ data, onBack, onPrint }) => {
             </tbody>
           </table>
           
-          <div style="text-align: right; margin: 5px 0; font-weight: bold;">Test: ${items.length}</div>
-          
-          <div style="margin: 15px 0; font-weight: bold;">In Words</div>
-          
-          <div class="amount-in-words">
-            ${numberToWords(netAmount)}
-          </div>
+          <div style="text-align: left; margin: 2px 0; font-weight: bold; font-size: 11px;">Test: ${items.length}</div>
           
           <div class="summary-section">
-            <div style="width: 300px; margin-left: auto;">
+            <div style="width: 250px; margin-left: auto;">
               <div class="summary-row">
                 <span>Sub Total:</span>
                 <span><strong>${formatCurrency(subtotal)}</strong></span>
@@ -349,7 +163,7 @@ const BillPreview = ({ data, onBack, onPrint }) => {
                 <span>Dues Amt.:</span>
                 <span><strong>${formatCurrency(duesAmt)}</strong></span>
               </div>
-              <div class="summary-row" style="border-top: 1px solid #000; padding-top: 5px; margin-top: 5px;">
+              <div class="summary-row" style="border-top: 1px solid #000; padding-top: 2px; margin-top: 2px;">
                 <span><strong>Net Amount:</strong></span>
                 <span><strong>${formatCurrency(netAmount)}</strong></span>
               </div>
@@ -357,19 +171,211 @@ const BillPreview = ({ data, onBack, onPrint }) => {
           </div>
           
           ${narration ? `
-            <div style="margin: 10px 0; padding: 5px; border: 1px solid #ccc;">
+            <div style="margin: 5px 0; padding: 5px; border: 1px solid #ccc; font-size: 10px;">
               <strong>Narration:</strong> ${narration}
             </div>
           ` : ''}
           
           <div class="footer">
-            <div class="footer-note"><strong>Monday to Sunday, Time - 08 : 00 AM to 07 : 00 PM</strong></div>
-            <div class="footer-note"><strong>Reports Can be taken after Full payment</strong></div>
+            <div class="footer-left">
+              <div class="footer-note"><strong>Monday to Sunday, Time - 08 : 00 AM to 07 : 00 PM</strong></div>
+              <div class="footer-note"><strong>Reports Can be taken after Full payment</strong></div>
+            </div>
             
             <div class="signature">
-              <div style="margin-top: 5px;">_______________________</div>
+              <div style="margin-top: 15px;">_______________________</div>
               <div>Authorised Signatory</div>
             </div>
+          </div>
+        </div>
+    `
+
+    printWindow.document.write(`
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <title> </title>
+        <style>
+          @page { margin: 0; size: A4 portrait; }
+          body { 
+            font-family: 'Arial', sans-serif; 
+            margin: 0; 
+            padding: 0; 
+            background: #fff; 
+            color: #000;
+            line-height: 1.3;
+            font-size: 11px;
+          }
+          .page-wrapper {
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+          }
+          .bill-wrapper {
+            flex: 1;
+            padding: 15px 25px;
+            box-sizing: border-box;
+            border-bottom: 1px dashed #ccc;
+            max-height: 50vh;
+            overflow: hidden;
+          }
+          .bill-wrapper:last-child {
+            border-bottom: none;
+          }
+          .bill-container { 
+            width: 100%; 
+            border: 2px solid #000; 
+            padding: 10px;
+            position: relative;
+            height: 100%;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+          }
+          .header { 
+            text-align: center; 
+            padding-bottom: 5px; 
+            margin-bottom: 5px;
+            border-bottom: 2px solid #000;
+            flex-shrink: 0;
+          }
+          .lab-name { 
+            font-size: 20px; 
+            font-weight: bold; 
+            color: #000; 
+            margin-bottom: 2px;
+            text-transform: uppercase;
+          }
+          .address { 
+            font-size: 10px; 
+            color: #000; 
+            margin: 1px 0;
+          }
+          .contact-info { 
+            font-size: 9px; 
+            color: #000; 
+            margin-top: 2px;
+          }
+          .receipt-title { 
+            font-size: 16px; 
+            font-weight: bold; 
+            text-align: center; 
+            margin: 5px 0;
+            text-decoration: underline;
+            text-transform: uppercase;
+            flex-shrink: 0;
+          }
+          .patient-section, .meta-section { 
+            margin-bottom: 5px;
+          }
+          .info-row-left { 
+            margin: 1px 0; 
+            padding: 0 2px;
+            display: grid;
+            grid-template-columns: 70px 5px auto;
+            align-items: center;
+          }
+          .info-label-left { 
+            font-weight: bold; 
+            white-space: nowrap;
+          }
+          .colon-left { 
+            display: inline-block; 
+            width: 5px; 
+            margin: 0;
+            text-align: center; 
+          }
+          .info-value-left { 
+            white-space: nowrap; 
+          }
+          .info-row-left span { white-space: nowrap; }
+
+          .info-row-right { 
+            margin: 1px 0; 
+            padding: 0 2px;
+            display: grid;
+            grid-template-columns: 145px 5px auto;
+            align-items: center;
+          }
+          .info-label-right { 
+            font-weight: bold; 
+            white-space: nowrap;
+          }
+          .colon-right { 
+            display: inline-block; 
+            width: 5px; 
+            margin: 0;
+            text-align: center; 
+          }
+          .info-value-right { 
+            white-space: nowrap; 
+          }
+          .info-row-right span { white-space: nowrap; }
+          table { 
+            width: 100%; 
+            border-collapse: collapse; 
+            margin: 5px 0;
+            border: 1px solid #000;
+            table-layout: fixed;
+          }
+          th { 
+            background: #f0f0f0; 
+            color: #000; 
+            padding: 4px; 
+            text-align: left;
+            border: 1px solid #000;
+            font-weight: bold;
+            font-size: 10px;
+          }
+          td { 
+            padding: 4px; 
+            border: 1px solid #000;
+            font-size: 10px;
+            vertical-align: top;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+          }
+          .summary-section { 
+            margin-top: 5px; 
+            flex-shrink: 0;
+          }
+          .summary-row { 
+            display: flex; 
+            justify-content: space-between; 
+            padding: 1px 0;
+          }
+          .footer { 
+            margin-top: auto; 
+            font-size: 9px; 
+            color: #000;
+            border-top: 1px solid #000;
+            padding-top: 5px;
+            flex-shrink: 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+          }
+          .footer-left {
+            text-align: left;
+          }
+          .footer-note { 
+            margin: 1px 0;
+          }
+          .signature { 
+            text-align: right;
+            font-size: 10px;
+          }
+          @media print {
+            body { padding: 0; }
+            .no-print { display: none !important; }
+          }
+        </style>
+      </head>
+      <body>
+        <div class="page-wrapper">
+          <div class="bill-wrapper">
+            ${billContent}
           </div>
         </div>
         <script>
@@ -511,14 +517,6 @@ const BillPreview = ({ data, onBack, onPrint }) => {
               </table>
               <div className="text-right p-2 bg-gray-50 border-t border-gray-300">
                 <span className="font-bold">Test: {items.length}</span>
-              </div>
-            </div>
-
-            {/* In Words */}
-            <div className="mb-4">
-              <div className="font-bold mb-1">In Words</div>
-              <div className="italic bg-gray-50 border border-gray-200 rounded p-3 text-gray-700 min-h-12">
-                {numberToWords(netAmount)}
               </div>
             </div>
 

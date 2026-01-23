@@ -72,13 +72,22 @@ const CreateBill = ({ onSubmit }) => {
 
   const addItem = () => setItems([...items, { name: '', amount: '' }])
   const updateItem = (idx, field, value) => {
-    const next = [...items]
-    if (field === 'name') {
-      next[idx] = { ...next[idx], name: value }
-    } else {
-      next[idx] = { ...next[idx], [field]: field === 'amount' ? (value === '' ? '' : Number(value)) : value }
-    }
-    setItems(next)
+    setItems((prev) => {
+      const next = [...prev]
+      if (field === 'name') {
+        next[idx] = { ...next[idx], name: value }
+      } else {
+        next[idx] = { ...next[idx], [field]: field === 'amount' ? (value === '' ? '' : Number(value)) : value }
+      }
+      return next
+    })
+  }
+  const selectTest = (idx, test) => {
+    setItems((prev) => {
+      const next = [...prev]
+      next[idx] = { ...next[idx], name: test.name, amount: test.amount }
+      return next
+    })
   }
   const removeItem = (idx) => setItems(items.filter((_, i) => i !== idx))
 
@@ -135,23 +144,23 @@ const CreateBill = ({ onSubmit }) => {
           </div>
 
           {/* Main Form Content */}
-          <div className="p-6">
+          <div className="p-4">
             {/* Patient and Meta Details */}
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-10">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-4">
               {/* Patient Details Card */}
-              <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl p-6 border border-blue-100">
-                <div className="flex items-center mb-6">
+              <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl p-4 border border-blue-100">
+                <div className="flex items-center mb-3">
                   <div className="p-2 bg-blue-100 rounded-lg mr-3">
                     <User className="h-5 w-5 text-blue-600" />
                   </div>
                   <h3 className="text-xl font-semibold text-gray-800">Patient Details</h3>
                 </div>
                 
-                <div className="grid grid-cols-12 gap-4">
+                <div className="grid grid-cols-12 gap-3">
                   <div className="space-y-1 col-span-12 md:col-span-6">
                     <label className="block text-sm font-medium text-gray-700">Full Name *</label>
                     <input 
-                      className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
+                      className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
                       placeholder="Enter patient name"
                       value={patient.name} 
                       onChange={(e)=>setPatient({...patient, name:e.target.value})}
@@ -162,7 +171,7 @@ const CreateBill = ({ onSubmit }) => {
                   <div className="space-y-1 col-span-12 md:col-span-6">
                     <label className="block text-sm font-medium text-gray-700">Age *</label>
                     <input 
-                      className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
+                      className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
                       type="number"
                       min="0"
                       placeholder="Enter age"
@@ -175,7 +184,7 @@ const CreateBill = ({ onSubmit }) => {
                   <div className="space-y-1 col-span-12 md:col-span-6">
                     <label className="block text-sm font-medium text-gray-700">Sex *</label>
                     <select
-                      className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
+                      className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
                       value={patient.sex}
                       onChange={(e)=>setPatient({...patient, sex:e.target.value})}
                       required
@@ -193,7 +202,7 @@ const CreateBill = ({ onSubmit }) => {
                         <Phone className="h-4 w-4 text-gray-500" />
                       </div>
                       <input 
-                        className="w-full border border-gray-300 rounded-r-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
+                        className="w-full border border-gray-300 rounded-r-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
                         placeholder="Phone number"
                         value={patient.mobile} 
                         onChange={(e)=>setPatient({...patient, mobile:e.target.value})}
@@ -201,13 +210,12 @@ const CreateBill = ({ onSubmit }) => {
                       />
                     </div>
                   </div>
-
                   
                   
                   <div className="space-y-1 col-span-12 md:col-span-6">
                     <label className="block text-sm font-medium text-gray-700">Referred By</label>
                     <input 
-                      className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
+                      className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
                       placeholder="Doctor's name"
                       value={patient.refBy} 
                       onChange={(e)=>setPatient({...patient, refBy:e.target.value})}
@@ -218,19 +226,19 @@ const CreateBill = ({ onSubmit }) => {
               </div>
 
               {/* Bill Meta Card */}
-              <div className="bg-gradient-to-br from-gray-50 to-blue-50 rounded-xl p-6 border border-gray-200">
-                <div className="flex items-center mb-6">
+              <div className="bg-gradient-to-br from-gray-50 to-blue-50 rounded-xl p-4 border border-gray-200">
+                <div className="flex items-center mb-3">
                   <div className="p-2 bg-gray-100 rounded-lg mr-3">
                     <Calendar className="h-5 w-5 text-gray-700" />
                   </div>
                   <h3 className="text-xl font-semibold text-gray-800">Bill Information</h3>
                 </div>
                 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                   <div className="space-y-1">
                     <label className="block text-sm font-medium text-gray-700">Bill ID</label>
                     <input 
-                      className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
+                      className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
                       readOnly
                       value={meta.id} 
                     />
@@ -239,7 +247,7 @@ const CreateBill = ({ onSubmit }) => {
                   <div className="space-y-1">
                     <label className="block text-sm font-medium text-gray-700">SI No</label>
                     <input 
-                      className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
+                      className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
                       readOnly
                       value={meta.siNo}
                     />
@@ -248,7 +256,7 @@ const CreateBill = ({ onSubmit }) => {
                   <div className="space-y-1">
                     <label className="block text-sm font-medium text-gray-700">Collection Date & Time</label>
                     <input 
-                      className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
+                      className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
                       type="datetime-local"
                       value={meta.collectionDateTime} 
                       onChange={(e)=>setMeta({...meta, collectionDateTime:e.target.value})}
@@ -258,7 +266,7 @@ const CreateBill = ({ onSubmit }) => {
                   <div className="space-y-1">
                     <label className="block text-sm font-medium text-gray-700">Billing Date & Time</label>
                     <input 
-                      className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
+                      className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
                       type="datetime-local"
                       value={meta.billingDateTime} 
                       onChange={(e)=>setMeta({...meta, billingDateTime:e.target.value})}
@@ -268,7 +276,7 @@ const CreateBill = ({ onSubmit }) => {
                   <div className="md:col-span-2 space-y-1">
                     <label className="block text-sm font-medium text-gray-700">Reporting Date & Time</label>
                     <input 
-                      className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
+                      className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
                       type="datetime-local"
                       value={meta.reportingTime} 
                       onChange={(e)=>setMeta({...meta, reportingTime:e.target.value})}
@@ -279,8 +287,8 @@ const CreateBill = ({ onSubmit }) => {
             </div>
 
             {/* Lab Details Card */}
-            <div className="mb-10 bg-gradient-to-br from-indigo-50 to-purple-50 rounded-xl p-6 border border-indigo-100">
-              <div className="flex items-center mb-6">
+            <div className="mb-4 bg-gradient-to-br from-indigo-50 to-purple-50 rounded-xl p-4 border border-indigo-100">
+              <div className="flex items-center mb-3">
                 <div className="p-2 bg-indigo-100 rounded-lg mr-3">
                   <Building className="h-5 w-5 text-indigo-600" />
                 </div>
@@ -375,8 +383,8 @@ const CreateBill = ({ onSubmit }) => {
             </div>
 
             {/* Test Items Card */}
-            <div className="mb-10 bg-white rounded-xl p-6 border border-gray-200 shadow-sm">
-              <div className="flex items-center justify-between mb-6">
+            <div className="mb-4 bg-white rounded-xl p-4 border border-gray-200 shadow-sm">
+              <div className="flex items-center justify-between mb-3">
                 <div className="flex items-center">
                   <div className="p-2 bg-green-100 rounded-lg mr-3">
                     <List className="h-5 w-5 text-green-600" />
@@ -386,7 +394,7 @@ const CreateBill = ({ onSubmit }) => {
                 <button 
                   type="button" 
                   onClick={addItem} 
-                  className="px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg flex items-center transition-colors"
+                  className="px-3 py-1.5 bg-green-600 hover:bg-green-700 text-white rounded-lg flex items-center transition-colors"
                 >
                   <Plus className="h-4 w-4 mr-2" />
                   Add Test
@@ -394,9 +402,9 @@ const CreateBill = ({ onSubmit }) => {
               </div>
               
               {items.length > 0 ? (
-                <div className="space-y-3">
+                <div className="space-y-1">
                   {/* Table Header */}
-                  <div className="grid grid-cols-12 gap-4 px-4 py-3 bg-gray-50 rounded-lg">
+                  <div className="grid grid-cols-12 gap-2 px-3 py-2 bg-gray-50 rounded-lg">
                     <div className="col-span-8 font-medium text-gray-700">Test Name</div>
                     <div className="col-span-3 font-medium text-gray-700">Amount (₹)</div>
                     <div className="col-span-1 font-medium text-gray-700">Action</div>
@@ -404,11 +412,11 @@ const CreateBill = ({ onSubmit }) => {
                   
                   {/* Items List */}
                   {items.map((item, idx)=>(
-                    <div key={idx} className="grid grid-cols-12 gap-4 items-center p-4 bg-gray-50/50 hover:bg-blue-50/50 rounded-lg transition-colors">
+                    <div key={idx} className="grid grid-cols-12 gap-2 items-center p-2 bg-gray-50/50 hover:bg-blue-50/50 rounded-lg transition-colors">
                       <div className="col-span-8">
                         <div className="relative">
                           <input 
-                            className="w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
+                            className="w-full border border-gray-300 rounded-lg px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
                             placeholder="Enter test name"
                             value={item.name} 
                             onFocus={()=>setOpenSuggestionIdx(idx)}
@@ -416,7 +424,7 @@ const CreateBill = ({ onSubmit }) => {
                             onChange={(e)=>updateItem(idx,'name',e.target.value)}
                           />
                           {openSuggestionIdx === idx && (
-                            <div className="absolute left-0 right-0 mt-2 bg-white border border-gray-200 rounded-lg shadow-lg max-h-64 overflow-auto z-10">
+                            <div className="absolute left-0 right-0 mt-1 bg-white border border-gray-200 rounded-lg shadow-lg max-h-64 overflow-auto z-10">
                               {pathologyTests
                                 .filter(t => {
                                   const q = (item.name || '').toLowerCase()
@@ -426,9 +434,9 @@ const CreateBill = ({ onSubmit }) => {
                                   <button
                                     key={i}
                                     type="button"
-                                    className="w-full text-left px-3 py-2 hover:bg-blue-50"
+                                    className="w-full text-left px-3 py-1.5 hover:bg-blue-50 text-sm"
                                     onMouseDown={()=>{
-                                      updateItem(idx,'name',t.name)
+                                      selectTest(idx, t)
                                       setOpenSuggestionIdx(null)
                                     }}
                                   >
@@ -444,7 +452,7 @@ const CreateBill = ({ onSubmit }) => {
                               setOpenSuggestionIdx(idx)
                             }}
                           >
-                            <ChevronDown className="h-4 w-4" />
+                            <ChevronDown className="h-3 w-3" />
                           </button>
                         </div>
                       </div>
@@ -454,7 +462,7 @@ const CreateBill = ({ onSubmit }) => {
                             <span className="text-gray-500">₹</span>
                           </div>
                           <input 
-                            className="w-full border border-gray-300 rounded-lg pl-8 pr-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
+                            className="w-full border border-gray-300 rounded-lg pl-8 pr-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
                             type="number" 
                             placeholder="Amount"
                             value={item.amount} 
@@ -466,7 +474,7 @@ const CreateBill = ({ onSubmit }) => {
                         <button 
                           type="button" 
                           onClick={()=>removeItem(idx)} 
-                          className="p-2 bg-red-100 hover:bg-red-200 text-red-600 rounded-lg transition-colors"
+                          className="p-1.5 bg-red-100 hover:bg-red-200 text-red-600 rounded-lg transition-colors"
                         >
                           <Trash2 className="h-4 w-4" />
                         </button>
@@ -517,20 +525,20 @@ const CreateBill = ({ onSubmit }) => {
               )}
             </div>
             {/* Discount and Narration */}
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-4">
               {/* Narration Card */}
-              <div className="bg-white rounded-xl p-6 border border-gray-200 shadow-sm">
-                <div className="flex items-center mb-6">
+              <div className="bg-white rounded-xl p-4 border border-gray-200 shadow-sm">
+                <div className="flex items-center mb-3">
                   <div className="p-2 bg-purple-100 rounded-lg mr-3">
                     <FileText className="h-5 w-5 text-purple-600" />
                   </div>
                   <h3 className="text-xl font-semibold text-gray-800">Narration / Remarks</h3>
                 </div>
                 
-                <div className="space-y-3">
+                <div className="space-y-2">
                   <textarea 
-                    className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition"
-                    rows={4} 
+                    className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition"
+                    rows={3} 
                     placeholder="Add any additional notes, remarks, or instructions here..."
                     value={narration} 
                     onChange={(e)=>setNarration(e.target.value)}
@@ -540,62 +548,60 @@ const CreateBill = ({ onSubmit }) => {
               </div>
 
               {/* Discount Card */}
-              <div className="bg-white rounded-xl p-6 border border-gray-200 shadow-sm">
-                <div className="flex items-center mb-6">
+              <div className="bg-white rounded-xl p-4 border border-gray-200 shadow-sm">
+                <div className="flex items-center mb-3">
                   <div className="p-2 bg-amber-100 rounded-lg mr-3">
                     <DollarSign className="h-5 w-5 text-amber-600" />
                   </div>
                   <h3 className="text-xl font-semibold text-gray-800">Discount & Final Amount</h3>
                 </div>
                 
-                <div className="space-y-6">
+                <div className="space-y-3">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Discount Amount (₹)</label>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Discount Amount (₹)</label>
                     <div className="relative">
                       <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                         <span className="text-gray-500">₹</span>
                       </div>
                       <input 
-                        className="w-full border border-gray-300 rounded-lg pl-8 pr-4 py-3 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent transition"
+                        className="w-full border border-gray-300 rounded-lg pl-8 pr-3 py-2 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent transition"
                         type="number" 
                         placeholder="Enter discount amount"
                         value={discount} 
                         onChange={(e)=>setDiscount(Number(e.target.value))}
                       />
                     </div>
-                    <p className="text-sm text-gray-500 mt-2">Enter the discount amount to be applied to the total bill.</p>
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Received Amount (₹)</label>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Received Amount (₹)</label>
                     <div className="relative">
                       <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                         <span className="text-gray-500">₹</span>
                       </div>
                       <input 
-                        className="w-full border border-gray-300 rounded-lg pl-8 pr-4 py-3 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent transition"
+                        className="w-full border border-gray-300 rounded-lg pl-8 pr-3 py-2 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent transition"
                         type="number" 
                         placeholder="Enter received amount"
                         value={receivedAmt} 
                         onChange={(e)=>setReceivedAmt(Number(e.target.value))}
                       />
                     </div>
-                    <p className="text-sm text-gray-500 mt-2">Enter how much payment is received. Dues will be calculated in preview.</p>
                   </div>
                   
-                  <div className="p-4 bg-gradient-to-r from-amber-50 to-orange-50 rounded-xl border border-amber-100">
-                    <h4 className="font-semibold text-gray-800 mb-3">Final Bill Summary</h4>
-                    <div className="space-y-2">
-                      <div className="flex justify-between">
+                  <div className="p-3 bg-gradient-to-r from-amber-50 to-orange-50 rounded-xl border border-amber-100">
+                    <h4 className="font-semibold text-gray-800 mb-2">Final Bill Summary</h4>
+                    <div className="space-y-1">
+                      <div className="flex justify-between text-sm">
                         <span className="text-gray-600">Tests Subtotal:</span>
                         <span className="font-medium">₹{items.reduce((sum, item) => sum + (item.amount || 0), 0)}</span>
                       </div>
-                      <div className="flex justify-between">
+                      <div className="flex justify-between text-sm">
                         <span className="text-gray-600">Discount Applied:</span>
                         <span className="font-medium text-red-600">-₹{discount}</span>
                       </div>
-                      <div className="flex justify-between pt-3 border-t border-amber-200">
+                      <div className="flex justify-between pt-2 border-t border-amber-200 mt-2">
                         <span className="font-bold text-gray-800">Final Payable Amount:</span>
-                        <span className="text-2xl font-bold text-amber-700">₹{calculateTotal()}</span>
+                        <span className="text-xl font-bold text-amber-700">₹{calculateTotal()}</span>
                       </div>
                     </div>
                   </div>
